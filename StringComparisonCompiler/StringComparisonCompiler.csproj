@@ -1,9 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFrameworks>net5.0;NET471</TargetFrameworks>
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Joseph Lennox</Authors>
+    <Description>StringComparisonCompiler is an optimizing compiler for string comparison. This replaces if/while comparisons, which can
+be performantly slow, with an dynamically compiled unrolled comparison. Case insensitive compares are exceptionally
+more performant.</Description>
+    <Copyright>Joseph Lennox 2021</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/jlennox/StringComparisonCompiler</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jlennox/StringComparisonCompiler</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -13,5 +23,16 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'NET471' ">
+    <PackageReference Include="System.Memory" Version="4.5.4" />
+  </ItemGroup>
 
 </Project>

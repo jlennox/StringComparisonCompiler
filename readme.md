@@ -1,6 +1,8 @@
 About
 ----
 
+Nuget: https://www.nuget.org/packages/StringComparisonCompiler
+
 StringComparisonCompiler is an optimizing compiler for string comparison. This replaces if/while comparisons, which can
 be performantly slow, with an dynamically compiled unrolled comparison. Case insensitive compares are exceptionally
 more performant.

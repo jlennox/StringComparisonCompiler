@@ -91,8 +91,10 @@ namespace StringComparisonCompiler
         {
             var tree = new MatchNode<T>('\x0');
 
-            foreach (var (word, val) in lookup)
+            foreach (var entry in lookup)
             {
+                var word = entry.Key;
+                var val = entry.Value;
                 var node = tree;
 
                 for (var i = 0; i < word.Length; ++i)
@@ -154,10 +156,19 @@ namespace StringComparisonCompiler
                 var descriptionAttr = field.GetCustomAttribute<DescriptionAttribute>(false);
                 var name = descriptionAttr?.Description ?? field.Name;
 
+#if NET471
+                if (result.ContainsKey(name))
+                {
+                    throw new ArgumentException($"Duplicate key with name '{name}' was encountered.", nameof(TEnum));
+                }
+
+                result[name] = (TEnum)Enum.Parse(typeof(TEnum), field.Name);
+#else
                 if (!result.TryAdd(name, Enum.Parse<TEnum>(field.Name)))
                 {
                     throw new ArgumentException($"Duplicate key with name '{name}' was encountered.", nameof(TEnum));
                 }
+#endif
             }
 
             return result;

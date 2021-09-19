@@ -16,7 +16,6 @@ namespace StringComparisonCompiler
         private readonly LabelTarget _returnTarget;
         private readonly ParameterExpression _input;
         private readonly MatchNodeCompilerInputType _inputType;
-        private readonly bool _isStartsWith;
         private readonly MethodInfo? _subMethodInfo;
 
         // Avoiding static in generic class.

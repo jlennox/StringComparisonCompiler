@@ -93,7 +93,7 @@ namespace StringComparisonCompiler.Test
         {
             var arr = new[] { "foo", "bar", "baz" };
             var compiled = StringComparisonCompiler.Compile(
-                arr, StringComparison.CurrentCulture, false, out var expression);
+                arr, StringComparison.CurrentCulture, out var expression);
             var stringed = ExpressionStringify.Stringify(expression);
             Assert.AreEqual(0, compiled("foo"));
             Assert.AreEqual(1, compiled("bar"));

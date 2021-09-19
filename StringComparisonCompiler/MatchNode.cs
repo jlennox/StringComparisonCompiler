@@ -6,8 +6,6 @@ using System.Reflection;
 
 namespace StringComparisonCompiler
 {
-    internal record MinMax(int Min, int Max);
-
     internal class MatchNode<TEnum>
     {
         public char Char { get; }
@@ -62,7 +60,9 @@ namespace StringComparisonCompiler
             var hasResult = false;
             foreach (var kid in Children)
             {
-                var (kidMin, kidMax) = kid.Value.GetPathLengths(localcounts, terminalMin);
+                var kids = kid.Value.GetPathLengths(localcounts, terminalMin);
+                var kidMin = kids.Min;
+                var kidMax = kids.Max;
                 var min = terminalMin ?? (hasResult ? Math.Min(kidMin, counts.Min) : kidMin);
                 var max = hasResult ? Math.Max(kidMax, counts.Max) : kidMax;
                 counts = new MinMax(min, max);
