@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
 using BenchmarkDotNet.Running;
-using StringComparisonCompiler.Test;
 
 namespace StringComparisonCompiler.Benchmarks
 {
@@ -30,13 +29,13 @@ namespace StringComparisonCompiler.Benchmarks
 
         static unsafe void Main(string[] args)
         {
-            Test();
-            var compiler = new MatchTree<KeywordsEnum>(
-                StringComparison.CurrentCulture,
-                false);
-
-            var compiled = compiler.Compile();
-            var stringed = ExpressionStringify.Stringify(compiler.Exp);
+            //Test();
+            //var compiler = new MatchTree<KeywordsEnum>(
+            //    StringComparison.CurrentCulture,
+            //    false);
+            //
+            //var compiled = compiler.Compile();
+            //var stringed = ExpressionStringify.Stringify(compiler.Exp);
 
             var summaries = new[] {
                 BenchmarkRunner.Run<Benchmarks>(),

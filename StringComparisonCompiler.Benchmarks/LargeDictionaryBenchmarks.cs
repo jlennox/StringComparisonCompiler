@@ -5,11 +5,18 @@ namespace StringComparisonCompiler.Benchmarks
 {
     public class LargeDictionaryBenchmarks
     {
-        private static readonly StringComparisonCompiler<KeywordsEnum>.SpanStringComparer _compiled = StringComparisonCompiler<KeywordsEnum>.CompileSpan();
+        private static readonly StringComparisonCompiler<KeywordsEnum>.SpanStringComparer _compiledSpan = StringComparisonCompiler<KeywordsEnum>.CompileSpan();
+        private static readonly StringComparisonCompiler<KeywordsEnum>.StringComparer _compiled = StringComparisonCompiler<KeywordsEnum>.Compile();
         private static readonly MatchTree<KeywordsEnum> _trie = new(StringComparison.CurrentCulture, false);
 
         [Params("while", "foreach", "stackalloc", "DoesNotExist")]
         public string N;
+
+        [Benchmark]
+        public KeywordsEnum CompiledSpan()
+        {
+            return _compiledSpan(N);
+        }
 
         [Benchmark]
         public KeywordsEnum Compiled()

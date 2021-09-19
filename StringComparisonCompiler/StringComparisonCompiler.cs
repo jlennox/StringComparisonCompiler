@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("StringComparisonCompiler.Test")]
@@ -10,21 +11,39 @@ namespace StringComparisonCompiler
         where TEnum : struct, Enum
     {
         public delegate TEnum SpanStringComparer(ReadOnlySpan<char> input);
-        public delegate TEnum StringCamparer(ReadOnlySpan<char> input);
+        public delegate TEnum StringComparer(string input);
 
         public static SpanStringComparer CompileSpan(
             StringComparison comparison = StringComparison.CurrentCulture,
             bool testStartsWith = false)
         {
-            var tree = new MatchTree<TEnum>(comparison, testStartsWith);
-            return tree.Compile();
+            return CompileSpan(comparison, testStartsWith, out _);
         }
 
-        public static StringCamparer Compile(
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SpanStringComparer CompileSpan(
+            StringComparison comparison,
+            bool testStartsWith,
+            out Expression expression)
+        {
+            var tree = new MatchTree<TEnum>(comparison, testStartsWith);
+            return tree.Compile<SpanStringComparer>(MatchNodeCompilerInputType.CharSpan, out expression);
+        }
+
+        public static StringComparer Compile(
             StringComparison comparison = StringComparison.CurrentCulture,
             bool testStartsWith = false)
         {
-            throw new NotImplementedException();
+            return Compile(comparison, testStartsWith, out _);
+        }
+
+        internal static StringComparer Compile(
+            StringComparison comparison,
+            bool testStartsWith,
+            out Expression expression)
+        {
+            var tree = new MatchTree<TEnum>(comparison, testStartsWith);
+            return tree.Compile<StringComparer>(MatchNodeCompilerInputType.String, out expression);
         }
     }
 

@@ -8,7 +8,7 @@ namespace StringComparisonCompiler
         // Work around for https://github.com/dotnet/runtime/issues/24621
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         // ReSharper disable once UnusedMember.Local
-        private static char GetChar(ReadOnlySpan<char> span, int index)
+        internal static char GetChar(ReadOnlySpan<char> span, int index)
         {
             return span[index];
         }

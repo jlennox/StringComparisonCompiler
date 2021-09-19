@@ -37,21 +37,30 @@ namespace StringComparisonCompiler
             }
         }
 
-        public StringComparisonCompiler<TEnum>.SpanStringComparer Compile()
+        public TReturnType Compile<TReturnType>(
+            MatchNodeCompilerInputType inputType,
+            out Expression expression) where TReturnType : Delegate
         {
-            var parameter = Expression.Parameter(typeof(ReadOnlySpan<char>), "s");
+            var parameterType = inputType switch
+            {
+                MatchNodeCompilerInputType.String => typeof(string),
+                MatchNodeCompilerInputType.CharSpan => typeof(ReadOnlySpan<char>),
+                _ => throw new NotImplementedException(),
+            };
+
+            var parameter = Expression.Parameter(parameterType, "s");
             var returnLabel = Expression.Label(typeof(TEnum));
 
-            var expression = Expression.Block(new[] {
-                _tree.GetSwitch(returnLabel, 0, new MinMax(0, 0), parameter, _testStartsWith, _charTransform),
-                Expression.Label(returnLabel, MatchNode<TEnum>.DefaultResult)
+            expression = Expression.Block(new[] {
+                _tree.Compile(returnLabel, parameter, inputType, _testStartsWith, _charTransform),
+                Expression.Label(returnLabel, MatchNodeCompiler<TEnum>.DefaultResult)
             });
 
             Exp = expression;
-            return Expression.Lambda<StringComparisonCompiler<TEnum>.SpanStringComparer>(
-                expression, parameter).Compile(false);
+            return Expression.Lambda<TReturnType>(expression, parameter).Compile(false);
         }
 
+        // For debug purposes.
         internal string GetDescription()
         {
             return _tree.GetDescription();

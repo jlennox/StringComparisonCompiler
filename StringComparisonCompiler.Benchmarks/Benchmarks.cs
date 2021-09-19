@@ -5,11 +5,18 @@ namespace StringComparisonCompiler.Benchmarks
 {
     public class Benchmarks
     {
-        private static readonly StringComparisonCompiler<TestingEnum>.SpanStringComparison _compiled = StringComparisonCompiler<TestingEnum>.CompileSpan();
+        private static readonly StringComparisonCompiler<TestingEnum>.SpanStringComparer _compiledSpan = StringComparisonCompiler<TestingEnum>.CompileSpan();
+        private static readonly StringComparisonCompiler<TestingEnum>.SpanStringComparer _compiled = StringComparisonCompiler<TestingEnum>.CompileSpan();
         private static readonly MatchTree<TestingEnum> _trie = new(StringComparison.CurrentCulture, false);
 
         [Params("While", "ForEach", "Foobar", "DoesNotExist")]
         public string N;
+
+        [Benchmark]
+        public TestingEnum CompiledSpan()
+        {
+            return _compiledSpan(N);
+        }
 
         [Benchmark]
         public TestingEnum Compiled()
