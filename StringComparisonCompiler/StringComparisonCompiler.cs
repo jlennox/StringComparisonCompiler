@@ -37,6 +37,7 @@ namespace StringComparisonCompiler
             return Compile(comparison, testStartsWith, out _);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static StringComparer Compile(
             StringComparison comparison,
             bool testStartsWith,
@@ -49,21 +50,45 @@ namespace StringComparisonCompiler
 
     public static class StringComparisonCompiler
     {
-        public delegate int? SpanStringComparer(ReadOnlySpan<char> input);
-        public delegate int? StringCamparer(ReadOnlySpan<char> input);
+        public delegate long SpanStringComparer(ReadOnlySpan<char> input);
+        public delegate long StringComparer(string input);
 
-        public static SpanStringComparer CompileSpan(
+        public static StringComparer Compile(
+            string[] input,
             StringComparison comparison = StringComparison.CurrentCulture,
             bool testStartsWith = false)
         {
-            throw new NotImplementedException();
+            return Compile(input, comparison, testStartsWith, out _);
         }
 
-        public static StringCamparer Compile(
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static StringComparer Compile(
+            string[] input,
+            StringComparison comparison,
+            bool testStartsWith,
+            out Expression expression)
+        {
+            var tree = new MatchTree(input, comparison, testStartsWith);
+            return tree.Compile<StringComparer>(MatchNodeCompilerInputType.String, out expression);
+        }
+
+        public static SpanStringComparer CompileSpan(
+            string[] input,
             StringComparison comparison = StringComparison.CurrentCulture,
             bool testStartsWith = false)
         {
-            throw new NotImplementedException();
+            return CompileSpan(input, comparison, testStartsWith, out _);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static SpanStringComparer CompileSpan(
+            string[] input,
+            StringComparison comparison,
+            bool testStartsWith,
+            out Expression expression)
+        {
+            var tree = new MatchTree(input, comparison, testStartsWith);
+            return tree.Compile<SpanStringComparer>(MatchNodeCompilerInputType.CharSpan, out expression);
         }
     }
 }

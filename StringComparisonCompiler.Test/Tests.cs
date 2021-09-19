@@ -87,5 +87,16 @@ namespace StringComparisonCompiler.Test
                 var compiled = StringComparisonCompiler<DuplicateNamesEnum>.Compile();
             });
         }
+
+        [TestMethod]
+        public void ArrayTest()
+        {
+            var arr = new[] { "Foo", "Bar", "Baz" };
+            var compiled = StringComparisonCompiler.Compile(arr);
+            Assert.AreEqual(0, compiled("Foo"));
+            Assert.AreEqual(1, compiled("Bar"));
+            Assert.AreEqual(2, compiled("Baz"));
+            Assert.AreEqual(-1, compiled("Not found"));
+        }
     }
 }

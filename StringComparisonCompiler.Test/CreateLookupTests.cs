@@ -15,7 +15,7 @@ namespace StringComparisonCompiler.Test
         [TestMethod]
         public void ValidateValues()
         {
-            var lookup = MatchTree<CreateLookupEnum>.CreateLookup();
+            var lookup = MatchTree<CreateLookupEnum>.CreateEnumLookup();
 
             Assert.AreEqual(lookup.Count, 2);
 

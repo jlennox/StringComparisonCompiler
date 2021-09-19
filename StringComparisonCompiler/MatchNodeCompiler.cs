@@ -12,7 +12,6 @@ namespace StringComparisonCompiler
     }
 
     internal class MatchNodeCompiler<TEnum>
-        where TEnum : Enum
     {
         private readonly LabelTarget _returnTarget;
         private readonly ParameterExpression _input;
@@ -27,7 +26,9 @@ namespace StringComparisonCompiler
                 BindingFlags.Static | BindingFlags.NonPublic)
             ?? throw new NotSupportedException($"Unable to locate {nameof(SpanHelper.GetChar)}");
 
-        internal static readonly Expression DefaultResult = Expression.Constant((TEnum?)default, typeof(TEnum?));
+        internal static readonly Expression DefaultResult = typeof(TEnum) == typeof(long)
+            ? Expression.Constant(-1L)
+            : Expression.Constant((TEnum?)default, typeof(TEnum?));
 
         public MatchNodeCompiler(
             LabelTarget returnTarget,

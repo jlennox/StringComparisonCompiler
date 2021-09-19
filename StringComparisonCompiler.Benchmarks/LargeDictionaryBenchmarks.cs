@@ -7,9 +7,12 @@ namespace StringComparisonCompiler.Benchmarks
     {
         private static readonly StringComparisonCompiler<KeywordsEnum>.SpanStringComparer _compiledSpan = StringComparisonCompiler<KeywordsEnum>.CompileSpan();
         private static readonly StringComparisonCompiler<KeywordsEnum>.StringComparer _compiled = StringComparisonCompiler<KeywordsEnum>.Compile();
+        private static readonly StringComparisonCompiler.StringComparer _compiledArray = StringComparisonCompiler.Compile(new[] { "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "int", "interface", "internal", "is", "lock", "long", "namespace", "new", "null", "object", "operator", "out", "override", "params", "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual", "void", "volatile", "while" });
         private static readonly MatchTree<KeywordsEnum> _trie = new(StringComparison.CurrentCulture, false);
 
-        [Params("while", "foreach", "stackalloc", "DoesNotExist")]
+        // Since the while/if performance is largely position dependent, "base" is selected because it's an early match,
+        // "void" because it's a late match, and "foreach" because it's near the middle. "stackalloc" because it's long.
+        [Params("foreach", "base", "void", "stackalloc", "DoesNotExist")]
         public string N;
 
         [Benchmark]
@@ -22,6 +25,12 @@ namespace StringComparisonCompiler.Benchmarks
         public KeywordsEnum Compiled()
         {
             return _compiled(N);
+        }
+
+        [Benchmark]
+        public long CompiledArray()
+        {
+            return _compiledArray(N);
         }
 
         [Benchmark]

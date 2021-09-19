@@ -9,7 +9,6 @@ namespace StringComparisonCompiler
     internal record MinMax(int Min, int Max);
 
     internal class MatchNode<TEnum>
-        where TEnum : Enum
     {
         public char Char { get; }
         public Dictionary<char, MatchNode<TEnum>> Children { get; }
@@ -26,7 +25,7 @@ namespace StringComparisonCompiler
             IsTerminal = isTerminal;
         }
 
-        internal MatchNode<TEnum> GetChildOrCreate(char c, bool isTerminal, TEnum? value)
+        public MatchNode<TEnum> GetChildOrCreate(char c, bool isTerminal, TEnum? value)
         {
             if (Children.TryGetValue(c, out var node)) return node;
 
@@ -34,21 +33,6 @@ namespace StringComparisonCompiler
             node.IsTerminal = node.IsTerminal || isTerminal;
             Children[c] = node;
             return node;
-        }
-
-        internal bool ContainsTerminal(string word, MethodInfo? transform)
-        {
-            var node = this;
-
-            for (var i = 0; i < word.Length; ++i)
-            {
-                var chr = transform != null ? char.ToUpperInvariant(word[i]) : word[i];
-                if (!node.Children.TryGetValue(chr, out node)) return false;
-                var isTerminal = i == word.Length - 1;
-                if (isTerminal && node.IsTerminal) return true;
-            }
-
-            return false;
         }
 
         // Does this node, and at least one descendant, have only a single child.
@@ -65,6 +49,7 @@ namespace StringComparisonCompiler
             return false;
         }
 
+        // Returns the min and max depth from this node.
         public MinMax GetPathLengths(MinMax counts, int? terminalMin = null)
         {
             if (Children.Count == 0) return counts;
@@ -96,6 +81,22 @@ namespace StringComparisonCompiler
         {
             var compiler = new MatchNodeCompiler<TEnum>(returnTarget, input, inputType, isStartsWith, subMethodInfo);
             return compiler.Compile(this, 0, new MinMax(0, 0));
+        }
+
+        // Exists for profiling purposes, to compare the compiled vs the soft execution speeds.
+        internal bool ContainsTerminal(string word, MethodInfo? transform)
+        {
+            var node = this;
+
+            for (var i = 0; i < word.Length; ++i)
+            {
+                var chr = transform != null ? char.ToUpperInvariant(word[i]) : word[i];
+                if (!node.Children.TryGetValue(chr, out node)) return false;
+                var isTerminal = i == word.Length - 1;
+                if (isTerminal && node.IsTerminal) return true;
+            }
+
+            return false;
         }
 
         // For debug purposes.
