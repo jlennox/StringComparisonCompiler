@@ -5,7 +5,7 @@ namespace StringComparisonCompiler.Benchmarks
 {
     public class CaseInsensitiveBenchmark
     {
-        private static readonly StringComparison _comparison = StringComparison.InvariantCultureIgnoreCase;
+        private const StringComparison _comparison = StringComparison.InvariantCultureIgnoreCase;
 
         private static readonly StringComparisonCompiler<TestingEnum>.SpanStringComparer _compiledSpan = StringComparisonCompiler<TestingEnum>.CompileSpan(_comparison);
         private static readonly StringComparisonCompiler<TestingEnum>.StringComparer _compiled = StringComparisonCompiler<TestingEnum>.Compile(_comparison);

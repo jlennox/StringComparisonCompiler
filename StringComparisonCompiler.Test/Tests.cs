@@ -91,11 +91,13 @@ namespace StringComparisonCompiler.Test
         [TestMethod]
         public void ArrayTest()
         {
-            var arr = new[] { "Foo", "Bar", "Baz" };
-            var compiled = StringComparisonCompiler.Compile(arr);
-            Assert.AreEqual(0, compiled("Foo"));
-            Assert.AreEqual(1, compiled("Bar"));
-            Assert.AreEqual(2, compiled("Baz"));
+            var arr = new[] { "foo", "bar", "baz" };
+            var compiled = StringComparisonCompiler.Compile(
+                arr, StringComparison.CurrentCulture, false, out var expression);
+            var stringed = ExpressionStringify.Stringify(expression);
+            Assert.AreEqual(0, compiled("foo"));
+            Assert.AreEqual(1, compiled("bar"));
+            Assert.AreEqual(2, compiled("baz"));
             Assert.AreEqual(-1, compiled("Not found"));
         }
     }

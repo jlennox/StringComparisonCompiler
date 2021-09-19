@@ -121,7 +121,7 @@ namespace StringComparisonCompiler
             : base(comparison, testStartsWith)
         {
             var lookup = CreateEnumLookup();
-            _tree = CreateTree<TEnum>(lookup);
+            _tree = CreateTree(lookup);
         }
 
         public override TReturnType Compile<TReturnType>(
