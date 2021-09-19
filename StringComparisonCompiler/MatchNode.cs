@@ -76,10 +76,9 @@ namespace StringComparisonCompiler
             LabelTarget returnTarget,
             ParameterExpression input,
             MatchNodeCompilerInputType inputType,
-            bool isStartsWith,
             MethodInfo? subMethodInfo)
         {
-            var compiler = new MatchNodeCompiler<TEnum>(returnTarget, input, inputType, isStartsWith, subMethodInfo);
+            var compiler = new MatchNodeCompiler<TEnum>(returnTarget, input, inputType, subMethodInfo);
             return compiler.Compile(this, 0, new MinMax(0, 0));
         }
 

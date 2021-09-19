@@ -34,13 +34,11 @@ namespace StringComparisonCompiler
             LabelTarget returnTarget,
             ParameterExpression input,
             MatchNodeCompilerInputType inputType,
-            bool isStartsWith,
             MethodInfo? subMethodInfo)
         {
             _returnTarget = returnTarget;
             _input = input;
             _inputType = inputType;
-            _isStartsWith = isStartsWith;
             _subMethodInfo = subMethodInfo;
         }
 

@@ -7,7 +7,7 @@ namespace StringComparisonCompiler.Benchmarks
     {
         private static readonly StringComparisonCompiler<TestingEnum>.SpanStringComparer _compiledSpan = StringComparisonCompiler<TestingEnum>.CompileSpan();
         private static readonly StringComparisonCompiler<TestingEnum>.SpanStringComparer _compiled = StringComparisonCompiler<TestingEnum>.CompileSpan();
-        private static readonly MatchTree<TestingEnum> _trie = new(StringComparison.CurrentCulture, false);
+        private static readonly MatchTree<TestingEnum> _trie = new(StringComparison.CurrentCulture);
 
         [Params("While", "ForEach", "Foobar", "DoesNotExist")]
         public string N;

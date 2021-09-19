@@ -14,36 +14,32 @@ namespace StringComparisonCompiler
         public delegate TEnum StringComparer(string input);
 
         public static SpanStringComparer CompileSpan(
-            StringComparison comparison = StringComparison.CurrentCulture,
-            bool testStartsWith = false)
+            StringComparison comparison = StringComparison.CurrentCulture)
         {
-            return CompileSpan(comparison, testStartsWith, out _);
+            return CompileSpan(comparison, out _);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SpanStringComparer CompileSpan(
             StringComparison comparison,
-            bool testStartsWith,
             out Expression expression)
         {
-            var tree = new MatchTree<TEnum>(comparison, testStartsWith);
+            var tree = new MatchTree<TEnum>(comparison);
             return tree.Compile<SpanStringComparer>(MatchNodeCompilerInputType.CharSpan, out expression);
         }
 
         public static StringComparer Compile(
-            StringComparison comparison = StringComparison.CurrentCulture,
-            bool testStartsWith = false)
+            StringComparison comparison = StringComparison.CurrentCulture)
         {
-            return Compile(comparison, testStartsWith, out _);
+            return Compile(comparison, out _);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static StringComparer Compile(
             StringComparison comparison,
-            bool testStartsWith,
             out Expression expression)
         {
-            var tree = new MatchTree<TEnum>(comparison, testStartsWith);
+            var tree = new MatchTree<TEnum>(comparison);
             return tree.Compile<StringComparer>(MatchNodeCompilerInputType.String, out expression);
         }
     }
@@ -55,39 +51,35 @@ namespace StringComparisonCompiler
 
         public static StringComparer Compile(
             string[] input,
-            StringComparison comparison = StringComparison.CurrentCulture,
-            bool testStartsWith = false)
+            StringComparison comparison = StringComparison.CurrentCulture)
         {
-            return Compile(input, comparison, testStartsWith, out _);
+            return Compile(input, comparison, out _);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static StringComparer Compile(
             string[] input,
             StringComparison comparison,
-            bool testStartsWith,
             out Expression expression)
         {
-            var tree = new MatchTree(input, comparison, testStartsWith);
+            var tree = new MatchTree(input, comparison);
             return tree.Compile<StringComparer>(MatchNodeCompilerInputType.String, out expression);
         }
 
         public static SpanStringComparer CompileSpan(
             string[] input,
-            StringComparison comparison = StringComparison.CurrentCulture,
-            bool testStartsWith = false)
+            StringComparison comparison = StringComparison.CurrentCulture)
         {
-            return CompileSpan(input, comparison, testStartsWith, out _);
+            return CompileSpan(input, comparison, out _);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static SpanStringComparer CompileSpan(
             string[] input,
             StringComparison comparison,
-            bool testStartsWith,
             out Expression expression)
         {
-            var tree = new MatchTree(input, comparison, testStartsWith);
+            var tree = new MatchTree(input, comparison);
             return tree.Compile<SpanStringComparer>(MatchNodeCompilerInputType.CharSpan, out expression);
         }
     }

@@ -9,7 +9,7 @@ namespace StringComparisonCompiler.Benchmarks
 
         private static readonly StringComparisonCompiler<TestingEnum>.SpanStringComparer _compiledSpan = StringComparisonCompiler<TestingEnum>.CompileSpan(_comparison);
         private static readonly StringComparisonCompiler<TestingEnum>.StringComparer _compiled = StringComparisonCompiler<TestingEnum>.Compile(_comparison);
-        private static readonly MatchTree<KeywordsEnum> _trie = new(StringComparison.InvariantCultureIgnoreCase, false);
+        private static readonly MatchTree<KeywordsEnum> _trie = new(StringComparison.InvariantCultureIgnoreCase);
 
         [Params("While", "ForEach", "Foobar", "DoesNotExist")]
         public string N;

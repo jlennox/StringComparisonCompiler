@@ -26,7 +26,7 @@ namespace StringComparisonCompiler.Test
                 ? StringComparison.InvariantCultureIgnoreCase
                 : StringComparison.CurrentCulture;
 
-            var compiled = StringComparisonCompiler<Foobar>.Compile(culture, false, out var expression);
+            var compiled = StringComparisonCompiler<Foobar>.Compile(culture, out var expression);
             var stringed = ExpressionStringify.Stringify(expression);
 
             Assert.AreEqual(Foobar.Testing, compiled("testing"));
@@ -60,7 +60,7 @@ namespace StringComparisonCompiler.Test
         public void OverlappingNames()
         {
             var compiled = StringComparisonCompiler<Overlapped>.Compile(
-                StringComparison.InvariantCultureIgnoreCase, false, out var expression);
+                StringComparison.InvariantCultureIgnoreCase, out var expression);
             var stringed = ExpressionStringify.Stringify(expression);
 
             // The compiler has to be able to differentiate when items are

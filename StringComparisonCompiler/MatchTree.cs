@@ -9,21 +9,19 @@ namespace StringComparisonCompiler
     internal class MatchTree
     {
         protected readonly MethodInfo? CharTransform;
-        protected readonly bool TestStartsWith;
 
         private readonly MatchNode<long> _tree;
 
-        public MatchTree(string[] input, StringComparison comparison, bool testStartsWith)
-            : this(comparison, testStartsWith)
+        public MatchTree(string[] input, StringComparison comparison)
+            : this(comparison)
         {
             var lookup = CreateArrayLookup(input);
             _tree = CreateTree(lookup);
         }
 
-        protected MatchTree(StringComparison comparison, bool testStartsWith)
+        protected MatchTree(StringComparison comparison)
         {
             CharTransform = GetCharTransform(comparison);
-            TestStartsWith = testStartsWith;
             _tree = default;
         }
 
@@ -43,7 +41,7 @@ namespace StringComparisonCompiler
             var returnLabel = Expression.Label(typeof(long));
 
             expression = Expression.Block(new[] {
-                _tree.Compile(returnLabel, parameter, inputType, TestStartsWith, CharTransform),
+                _tree.Compile(returnLabel, parameter, inputType, CharTransform),
                 Expression.Label(returnLabel, MatchNodeCompiler<long>.DefaultResult)
             });
 
@@ -117,8 +115,8 @@ namespace StringComparisonCompiler
     {
         private readonly MatchNode<TEnum> _tree;
 
-        public MatchTree(StringComparison comparison, bool testStartsWith)
-            : base(comparison, testStartsWith)
+        public MatchTree(StringComparison comparison)
+            : base(comparison)
         {
             var lookup = CreateEnumLookup();
             _tree = CreateTree(lookup);
@@ -139,7 +137,7 @@ namespace StringComparisonCompiler
             var returnLabel = Expression.Label(typeof(TEnum));
 
             expression = Expression.Block(new[] {
-                _tree.Compile(returnLabel, parameter, inputType, TestStartsWith, CharTransform),
+                _tree.Compile(returnLabel, parameter, inputType, CharTransform),
                 Expression.Label(returnLabel, MatchNodeCompiler<TEnum>.DefaultResult)
             });
 
